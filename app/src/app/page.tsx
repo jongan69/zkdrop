@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 import {
@@ -9,10 +9,7 @@ import {
   PopUp,
   Footer,
   Header,
-  Featured,
   Hero,
-  Action,
-  Discover,
   Tokens,
 } from "@/components";
 
@@ -20,30 +17,17 @@ import {
 export default function Home() {
   const {
     publicKey,
-    signTransaction,
   } = useWallet();
 
-  const [nfts, setNfts] = useState([]);
-
-
-
-  useEffect(() => {
-    const storedArray = localStorage.getItem("SOLANA_NFTS");
-    if (storedArray) {
-      const nftsArray = JSON.parse(storedArray);
-      setNfts(nftsArray.reverse());
-    }
-  }, []);
-
-  function removeLastItemFromLocalStorage() {
-    const storedArray = localStorage.getItem("SOLANA_NFTS");
-    if (storedArray) {
-      const array = JSON.parse(storedArray);
-      array.pop();
-      const updatedArray = JSON.stringify(array);
-      localStorage.setItem("SOLANA_NFTS", updatedArray);
-    }
-  }
+  // function removeLastItemFromLocalStorage() {
+  //   const storedArray = localStorage.getItem("SOLANA_NFTS");
+  //   if (storedArray) {
+  //     const array = JSON.parse(storedArray);
+  //     array.pop();
+  //     const updatedArray = JSON.stringify(array);
+  //     localStorage.setItem("SOLANA_NFTS", updatedArray);
+  //   }
+  // }
 
   return (
     <>
@@ -51,7 +35,7 @@ export default function Home() {
       <div id="wrapper">
         <div id="page" className="pt-40">
           <Header />
-          {publicKey && <Hero removeLastItemFromLocalStorage={removeLastItemFromLocalStorage} publicKey={publicKey} />}
+          <Hero />
           {/* ZK Compression cToken Mint/Claim UI */}
           {publicKey && <Tokens publicKey={publicKey} />}
           {/* End ZK Compression UI */}

@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { SHORTEN_ADDRESS } from "../../lib/constants";
-import { FaWallet, TbCurrencySolana } from "@/components/SVG";
+// import { SHORTEN_ADDRESS } from "../../lib/constants";
+// import { FaWallet, TbCurrencySolana } from "@/components/SVG";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
@@ -88,20 +88,14 @@ const statusStyle: React.CSSProperties = {
   border: '1px solid #e0fa35',
 };
 
-export default function ClaimPage() {
+function ClaimPageInner() {
   const searchParams = useSearchParams();
   const [claimInput, setClaimInput] = useState("");
   const [claimStatus, setClaimStatus] = useState("");
   const [isClaiming, setIsClaiming] = useState(false);
   const {
     connected,
-    connect,
-    disconnect,
-    connecting,
     publicKey,
-    wallet,
-    wallets,
-    select,
   } = useWallet();
   const [balance, setBalance] = useState<number | null>(null);
 
@@ -117,7 +111,7 @@ export default function ClaimPage() {
           const connection = new Connection("https://api.mainnet-beta.solana.com");
           const balance = await connection.getBalance(new PublicKey(publicKey.toString()));
           setBalance(balance / 1e9);
-        } catch (error) {
+        } catch {
           setBalance(null);
         }
       }
@@ -159,6 +153,7 @@ export default function ClaimPage() {
           {/* Wallet Connect/Select Button */}
           <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
             <WalletMultiButton style={{ ...buttonStyle, minWidth: 180 }} />
+            <h1>{balance}</h1>
           </div>
           {/* End Wallet Button */}
           <form style={formStyle} onSubmit={e => { e.preventDefault(); handleClaimCToken(); }}>
@@ -187,5 +182,13 @@ export default function ClaimPage() {
         </div>
       </div>
     </section>
+  );
+}
+
+export default function ClaimPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ClaimPageInner />
+    </Suspense>
   );
 } 

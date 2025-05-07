@@ -42,8 +42,14 @@ export async function POST(req: NextRequest) {
     console.log('Transfer successful, txId:', txId);
 
     return NextResponse.json({ tx: txId });
-  } catch (e: any) {
+  } catch (e: unknown) {
+    let errorMessage = 'Unknown error';
+    if (e instanceof Error) {
+      errorMessage = e.message;
+    } else if (typeof e === 'string') {
+      errorMessage = e;
+    }
     console.error('Error in /api/claim POST:', e);
-    return NextResponse.json({ error: e.message || e.toString() }, { status: 500 });
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

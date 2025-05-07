@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IoIosArrowUp } from "../SVG/index";
+// import { IoIosArrowUp } from "../SVG/index";
 
 const Mouse = () => {
   return (

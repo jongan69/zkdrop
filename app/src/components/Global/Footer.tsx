@@ -1,11 +1,9 @@
 import React from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 import {
-  TiSocialVimeo,
-  TiSocialFacebook,
-  TiSocialLinkedin,
   TiSocialTwitter,
-  TiSocialYoutube,
 } from "../SVG/index";
 
 const Footer = () => {
@@ -17,16 +15,19 @@ const Footer = () => {
             <div className="footer-content flex flex-grow">
               <div className="widget-logo flex-grow">
                 <div className="logo-footer" id="logo-footer">
-                  <a href="/">
-                    <img
+                  <Link href="/">
+                    <Image
                       id="logo_footer"
-                      src="logo.png"
+                      src="/logo.png"
+                      alt="ZK Compression Logo"
+                      width={60}
+                      height={60}
                       style={{
                         width: "60px",
                         height: "auto",
                       }}
                     />
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="widget widget-menu style-1">

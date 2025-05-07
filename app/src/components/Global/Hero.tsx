@@ -1,6 +1,4 @@
 import React from "react";
-import { FaWallet, FaExternalLinkAlt } from "../SVG/index";
-import { PublicKey } from "@solana/web3.js";
 
 const styles = {
   heroBg: {
@@ -109,7 +107,7 @@ const styles = {
   },
 };
 
-const Hero = ({ removeLastItemFromLocalStorage, publicKey }: { removeLastItemFromLocalStorage: () => void, publicKey: PublicKey }) => {
+const Hero = () => {
   return (
     <section id="home" style={styles.heroBg}>
       <div style={styles.overlay} />
@@ -119,7 +117,7 @@ const Hero = ({ removeLastItemFromLocalStorage, publicKey }: { removeLastItemFro
             ZK Compression Minting & Claiming on Solana
           </h1>
           <p style={styles.sub}>
-            Unlock the next generation of NFT privacy, scalability, and security. Mint and claim NFTs using Zero-Knowledge proofs and state compression—your transactions, your data, your control. Enjoy seamless, private, and efficient NFT experiences powered by Solana's speed and ZK technology.
+            Unlock the next generation of NFT privacy, scalability, and security. Mint and claim NFTs using Zero-Knowledge proofs and state compression—your transactions, your data, your control. Enjoy seamless, private, and efficient NFT experiences powered by Solana&#39;s speed and ZK technology.
           </p>
         </header>
       </div>
