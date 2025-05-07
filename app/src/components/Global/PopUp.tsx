@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { FaExternalLinkAlt } from "../SVG/index";
+import Image from "next/image";
 
 const PopUp = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ const PopUp = () => {
       // For now, just showing success message
       notifySuccess("Thanks for subscribing!");
       setEmail("");
-    } catch (error) {
+    } catch {
       notifyError("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -45,11 +46,14 @@ const PopUp = () => {
           </button>
           <form className="modal-body" onSubmit={handleSubmit}>
             <div className="image">
-              <img src="assets/images/backgroup-section/popup.png" alt="" />
+              <Image src="/assets/images/backgroup-section/popup.png" alt="Newsletter popup background" width={400} height={200} />
             </div>
             <div className="logo-rotate">
-              <img
-                src="logo.png"
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={60}
+                height={60}
                 style={{
                   width: "60px",
                   height: "auto",

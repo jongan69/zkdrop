@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
+import { Connection, PublicKey } from "@solana/web3.js";
 import {
   FaWallet,
-  FaExternalLinkAlt,
   Header_1,
   LuSearch,
-  TiSocialVimeo,
-  TiSocialFacebook,
-  TiSocialLinkedin,
   TiSocialTwitter,
-  TiSocialYoutube,
   TbCurrencySolana,
   IoMenu,
 } from "../SVG/index";
+import Image from "next/image";
+import Link from "next/link";
 
 import { SHORTEN_ADDRESS } from "../../lib/constants";
 
@@ -34,7 +31,7 @@ const Header = () => {
   const [mobileNav, setMobileNav] = useState(false);
   const [balance, setBalance] = useState<number | null>(null);
 
-  const connection = new Connection(HELIUS_RPC_URL);
+  const connection = useMemo(() => new Connection(HELIUS_RPC_URL), []);
 
   useEffect(() => {
     const fetchBalance = async () => {
@@ -75,11 +72,13 @@ const Header = () => {
     <div id="header_main" className="header_1 header-fixed">
       <div className="header_menu">
         <a rel="home" className="main-logo ">
-          <img
+          <Image
             id="logo_header"
-            src="logo.png"
+            src="/logo.png"
+            alt="Logo"
+            width={60}
+            height={60}
             style={{
-              width: "60px",
               height: "auto",
             }}
           />
@@ -101,11 +100,13 @@ const Header = () => {
                 <div id="site-logo ">
                   <div id="site-logo-inner ">
                     <a rel="home" className="main-logo ">
-                      <img
+                      <Image
                         id="logo_header"
-                        src="logo.png"
+                        src="/logo.png"
+                        alt="Logo"
+                        width={60}
+                        height={60}
                         style={{
-                          width: "60px",
                           height: "auto",
                         }}
                       />
@@ -175,11 +176,13 @@ const Header = () => {
         <div className="inner-canvas-nav">
           <div className="side-bar">
             <a href="index.html" rel="home" className="main-logo">
-              <img
+              <Image
                 id="logo_header"
-                src="logo.png"
+                src="/logo.png"
+                alt="Logo"
+                width={60}
+                height={60}
                 style={{
-                  width: "60px",
                   height: "auto",
                 }}
               />
@@ -293,16 +296,20 @@ const Header = () => {
         <div className="overlay-mobile-nav" />
         <div className="inner-mobile-nav">
           <div className="side-bar">
-            <a href="/" rel="home" className="main-logo">
-              <img
-                id="logo_header"
-                src="logo.png"
-                style={{
-                  width: "60px",
-                  height: "auto",
-                }}
-              />
-            </a>
+            <Link href="/">
+              <a className="main-logo">
+                <Image
+                  id="logo_header"
+                  src="/logo.png"
+                  alt="Logo"
+                  width={60}
+                  height={60}
+                  style={{
+                    height: "auto",
+                  }}
+                />
+              </a>
+            </Link>
 
             <div
               className="canvas-nav-close"

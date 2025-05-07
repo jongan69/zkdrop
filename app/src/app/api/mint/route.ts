@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Keypair, PublicKey, Transaction } from '@solana/web3.js';
+import { Keypair } from '@solana/web3.js';
 import { createMint, mintTo } from '@lightprotocol/compressed-token';
 import { connection } from '@/lib/lightConnection';
 import bs58 from 'bs58';
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         const mintToResult = await mintTo(connection, payer, mint, recipientPubkey, payer, 1e9);
         console.log('Minted tokens to recipient. Result:', mintToResult);
 
-        const { name, symbol, image, description, link } = metadata;
+        const { name, symbol, image, link } = metadata;
         // For demo, use image as uri. In production, upload metadata to Arweave/IPFS and use that uri.
         const uri = image || link;
 
@@ -74,8 +74,14 @@ export async function POST(req: NextRequest) {
             tx: transactionSignature,
             metadataAddress: nftResult.result.value,
         });
-    } catch (e: any) {
+    } catch (e: unknown) {
+        let errorMessage = 'Unknown error';
+        if (e instanceof Error) {
+            errorMessage = e.message;
+        } else if (typeof e === 'string') {
+            errorMessage = e;
+        }
         console.error('Error in /api/mint:', e);
-        return NextResponse.json({ error: e.message || e.toString() }, { status: 500 });
+        return NextResponse.json({ error: errorMessage }, { status: 500 });
     }
 }

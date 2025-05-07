@@ -9,11 +9,12 @@ import {
   createRpc,
   selectStateTreeInfo,
 } from "@lightprotocol/stateless.js";
-import { Transaction, PublicKey, LAMPORTS_PER_SOL, SystemProgram, Keypair } from "@solana/web3.js";
+import { Transaction, LAMPORTS_PER_SOL, Keypair } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { UPLOAD_IPFS_IMAGE } from "@/lib/constants";
 import { QRCodeCanvas } from "qrcode.react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import Image from "next/image";
 
 const cardStyle = {
   background: '#161616',
@@ -112,7 +113,7 @@ export default function MintPage() {
 }
 
 const MintForm = () => {
-  const { publicKey, sendTransaction, connected, wallet, signTransaction } = useWallet();
+  const { publicKey, connected, signTransaction } = useWallet();
   const [tokenName, setTokenName] = useState("");
   const [tokenSymbol, setTokenSymbol] = useState("");
   const [tokenImage, setTokenImage] = useState("");
@@ -144,7 +145,7 @@ const MintForm = () => {
         const txFees = 0.001 * LAMPORTS_PER_SOL; // 0.001 SOL buffer
         const total = mintRent + txFees;
         if (!cancelled) setMintCost(total);
-      } catch (e) {
+      } catch {
         if (!cancelled) setMintCost(null);
       }
       if (!cancelled) setCostLoading(false);
@@ -154,8 +155,7 @@ const MintForm = () => {
   }, [publicKey, connected]);
 
   // Main mint handler
-  const onMint = useCallback(async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
+  const onMint = useCallback(async () => {
     setError("");
     setMintAddress("");
     setMintTx("");
@@ -278,9 +278,14 @@ const MintForm = () => {
       setMintTx(sig2);
       setQrValue(`${window.location.origin}/claim?mint=${mintKeypair.publicKey.toBase58()}`);
       console.log("[18] Minting process complete. QR value set.");
-    } catch (err: any) {
-      setError(err.message || err.toString());
-      console.error("[ERROR] Minting failed:", err);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+        console.error("[ERROR] Minting failed:", err);
+      } else {
+        setError(String(err));
+        console.error("[ERROR] Minting failed:", err);
+      }
     }
     setIsMinting(false);
   }, [publicKey, connected, signTransaction]);
@@ -293,7 +298,7 @@ const MintForm = () => {
             <WalletMultiButton style={{ ...buttonStyle, minWidth: 180 }} />
           </div>
         <div style={cardStyle as React.CSSProperties}>
-          <form onSubmit={onMint} style={formStyle as React.CSSProperties}>
+          <form onSubmit={async (e) => { e.preventDefault(); await onMint(); }} style={formStyle as React.CSSProperties}>
             {/* Cost display */}
             <div style={{ marginBottom: 12, textAlign: 'center', color: '#e0fa35', fontWeight: 500, fontSize: 16 }}>
               {costLoading ? (
@@ -343,7 +348,15 @@ const MintForm = () => {
                   }
                 }}
               />
-              {tokenImage && <img src={tokenImage} alt="Token" style={{ marginTop: 8, maxWidth: 120, borderRadius: 8 } as React.CSSProperties} />}
+              {tokenImage && (
+                <Image
+                  src={tokenImage}
+                  alt="Token"
+                  width={120}
+                  height={120}
+                  style={{ marginTop: 8, maxWidth: 120, borderRadius: 8 } as React.CSSProperties}
+                />
+              )}
             </div>
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column' } as React.CSSProperties}>
               <label style={labelStyle as React.CSSProperties}>Description</label>
