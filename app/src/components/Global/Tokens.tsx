@@ -281,6 +281,22 @@ const Tokens = ({ publicKey }: { publicKey: PublicKey }) => {
                 <div style={qrContainerStyle}>
                   <QRCodeCanvas value={qrValue} size={140} />
                   <div style={{ color: '#e0fa35', fontWeight: 500, marginTop: 4 }}>Scan to claim</div>
+                  {/* Claim URL display */}
+                  <div style={{ marginTop: 12, width: '100%', textAlign: 'center' }}>
+                    <div style={{ color: '#e0fa35', fontWeight: 500, marginBottom: 4 }}>Claim URL:</div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                      <code style={{ ...codeBlockStyle, margin: 0, flex: 1 }}>{qrValue}</code>
+                      <button
+                        style={{ ...buttonStyle, padding: '8px 12px', fontSize: 14, borderRadius: 6, minWidth: 60 }}
+                        onClick={() => {
+                          navigator.clipboard.writeText(qrValue);
+                        }}
+                        type="button"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
